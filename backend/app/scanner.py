@@ -1,11 +1,12 @@
 import logging
 import subprocess
 import json
-import shlex
-from typing import Dict, Any, AsyncGenerator
+from typing import Dict, Any
 from fastapi.concurrency import run_in_threadpool
+from config import configure_logging
 
-logger = logging.getLogger("uvicorn")
+configure_logging()
+logger = logging.getLogger(__name__)
 
 FLAGS = ['-json', '-title', '-status-code', '-tech-detect', '-cname', '-ip', '-server', '-fr']
 
@@ -17,34 +18,46 @@ class HTTPXScanner:
     """
 
     @staticmethod
-    async def run_scan(domain: str) -> AsyncGenerator[Dict[str, Any], None]:
+    async def run_scan(domain: str) -> Dict[str, Any]:
         """
-        Runs HTTPX CLI and yields parsed JSON objects line-by-line.
+        Executes an HTTPX scan on the provided domain and returns the parsed JSON output.
+
+        Parameters:
+            domain (str): The domain to scan.
+
+        Returns:
+            Dict[str, Any]: The parsed JSON output from the HTTPX scan or an error dict.
         """
-        cmd = f"httpx -u {domain} {' '.join(FLAGS)}"
+        cmd = ["httpx", "-u", domain] + FLAGS
         logger.info(f"Starting HTTPX scan for {domain}")
         logger.debug(f"Constructed command: {cmd}")
-
         try:
             process = await run_in_threadpool(
                 subprocess.run,
-                shlex.split(cmd),
+                cmd,
                 capture_output=True,
                 text=True,
                 check=True,
+                timeout=30
             )
             logger.info(f"HTTPX scan completed for {domain}")
+        except subprocess.TimeoutExpired as te:
+            logger.error(f"HTTPX scan timed out for '{domain}': {str(te)}")
+            return {"error": f"HTTPX scan timed out for '{domain}'", "details": str(te)}
         except subprocess.CalledProcessError as e:
             logger.error(f"HTTPX scan failed for '{domain}': {str(e)}")
-            yield {"error": f"HTTPX scan failed for '{domain}'", "details": str(e)}
-            return
+            return {"error": f"HTTPX scan failed for '{domain}'", "details": str(e)}
 
-        for line in process.stdout.strip().split("\n"):
-            if line.strip():
-                try:
-                    parsed_data = json.loads(line)
-                    logger.debug(f"Parsed output: {parsed_data}")
-                    yield parsed_data
-                except json.JSONDecodeError:
-                    logger.warning(f"Failed to parse line: {line}")
-                    yield {"error": "Failed to parse line", "line": line}
+        output = process.stdout
+        logger.debug(f"HTTPX scan output: {output}, type: {type(output)}")
+        if not output:
+            logger.error(f"No output returned for domain {domain}. Domain might not be found.")
+            return {"error": f"No output returned for domain {domain}. Domain might not be found."}
+
+        try:
+            parsed_data = json.loads(output)
+            logger.debug(f"Json parsed output: {parsed_data}")
+            return parsed_data
+        except json.JSONDecodeError:
+            logger.warning(f"Failed to parse output: {output}")
+            return {"error": "Failed to parse output", "output": output}
