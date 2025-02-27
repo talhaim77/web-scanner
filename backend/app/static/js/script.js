@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayResults(data) {
     resultsDiv.innerHTML = `
       <table class="table table-hover table-bordered shadow-sm">
-        <thead class="table-dark">
+         <thead class="bg-primary text-white">
           <tr><th>Field</th><th>Value</th></tr>
         </thead>
         <tbody>
