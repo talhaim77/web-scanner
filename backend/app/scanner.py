@@ -1,9 +1,14 @@
+import logging
 import subprocess
 import json
 import shlex
 from typing import Dict, Any, AsyncGenerator
 from fastapi.concurrency import run_in_threadpool
-from app_logger import logger
+
+logger = logging.getLogger("uvicorn")
+
+FLAGS = ['-json', '-title', '-status-code', '-tech-detect', '-cname', '-ip', '-server', '-fr']
+
 
 class HTTPXScanner:
     """
@@ -16,7 +21,7 @@ class HTTPXScanner:
         """
         Runs HTTPX CLI and yields parsed JSON objects line-by-line.
         """
-        cmd = f"httpx -u {domain} -json -title -status-code -tech-detect -cname -ip -server -fr"
+        cmd = f"httpx -u {domain} {' '.join(FLAGS)}"
         logger.info(f"Starting HTTPX scan for {domain}")
         logger.debug(f"Constructed command: {cmd}")
 

@@ -1,5 +1,7 @@
+import logging
 from typing import Dict, Any
-from app_logger import logger
+
+logger = logging.getLogger("uvicorn")
 
 
 class BaseExtractor:
