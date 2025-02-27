@@ -48,6 +48,3 @@ class HTTPXScanner:
                 except json.JSONDecodeError:
                     logger.warning(f"Failed to parse line: {line}")
                     yield {"error": "Failed to parse line", "line": line}
-
-
-

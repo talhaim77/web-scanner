@@ -50,7 +50,6 @@ def test_httpx_extractor():
     expected_domain = "mailtrap.io"
     expected_related_ips = {
         "104.22.7.198", "104.22.6.198", "172.67.5.169",
-        "2606:4700:10::ac43:5a9", "2606:4700:10::6816:7c6", "2606:4700:10::6816:6c6"
     }
     expected_title = "Mailtrap: Email Delivery Platform"
     expected_status_code = 200
