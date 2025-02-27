@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Web Scanner{% endblock %}
+
+{% block content %}
+  <h1 class="mb-4">Web Scanner</h1>
+  <div class="mb-3">
+    <input type="text" id="domainInput" class="form-control" placeholder="Enter domain name">
+  </div>
+  <button id="scanButton" class="btn btn-primary">Scan</button>
+  <div id="loading" class="mt-3 text-primary fw-bold" style="display: none;">Scanning in progress...</div>
+  <div id="results" class="mt-3 p-3 border rounded bg-light" style="white-space: pre-wrap;"></div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="/static/js/script.js"></script>
+{% endblock %}
