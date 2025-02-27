@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
+
 class ScanResult(BaseModel):
     domain: str
     related_ips: List[str] = []

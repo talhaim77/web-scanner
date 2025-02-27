@@ -15,6 +15,7 @@ with open("tests/mock_scan_data.json", "r") as file:
 def fake_scan(monkeypatch):
     """Fixture to mock scanner HTTPXScanner.run_scan response."""
     from scanner import HTTPXScanner
+
     async def fake_run_scan(domain: str):
         """Mock response for a scan request."""
         yield MOCK_SCAN_DATA

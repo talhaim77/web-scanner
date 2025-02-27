@@ -1,6 +1,7 @@
 import pytest
 from extractor import HTTPXExtractor
 
+
 def test_httpx_extractor():
     # Sample raw data based on your provided JSON
     raw_data = {
@@ -22,7 +23,7 @@ def test_httpx_extractor():
         "aaaa": [
             "2606:4700:10::ac43:5a9",
             "2606:4700:10::6816:7c6",
-            "2606:4700:10::6816:6c6"
+            "2606:4700:10::6816:6c6",
         ],
         "tech": [
             "Cloudflare",
@@ -31,7 +32,7 @@ def test_httpx_extractor():
             "PHP",
             "Site Kit:1.111.1",
             "WP Rocket",
-            "WordPress"
+            "WordPress",
         ],
         "words": 76441,
         "lines": 2536,
@@ -40,7 +41,7 @@ def test_httpx_extractor():
         "failed": False,
         "cdn": True,
         "knowledgebase": {"PageType": "other", "pHash": 0},
-        "resolvers": ["1.1.1.1:53", "1.0.0.1:53"]
+        "resolvers": ["1.1.1.1:53", "1.0.0.1:53"],
     }
 
     extractor = HTTPXExtractor()
@@ -49,14 +50,21 @@ def test_httpx_extractor():
     # Expected values
     expected_domain = "mailtrap.io"
     expected_related_ips = {
-        "104.22.7.198", "104.22.6.198", "172.67.5.169",
+        "104.22.7.198",
+        "104.22.6.198",
+        "172.67.5.169",
     }
     expected_title = "Mailtrap: Email Delivery Platform"
     expected_status_code = 200
     expected_webserver = "cloudflare"
     expected_technologies = [
-        "Cloudflare", "HTTP/3", "MySQL", "PHP",
-        "Site Kit:1.111.1", "WP Rocket", "WordPress"
+        "Cloudflare",
+        "HTTP/3",
+        "MySQL",
+        "PHP",
+        "Site Kit:1.111.1",
+        "WP Rocket",
+        "WordPress",
     ]
     expected_cnames = []
 

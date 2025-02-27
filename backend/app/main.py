@@ -12,4 +12,3 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(scan_router, tags=["Scan"])
 app.include_router(template_router, tags=["Template"])
-

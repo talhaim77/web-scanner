@@ -5,9 +5,11 @@ from fastapi.templating import Jinja2Templates
 router = APIRouter()
 templates = Jinja2Templates(directory="static/templates")
 
+
 @router.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return RedirectResponse(url="/home")
+
 
 @router.get("/home", response_class=HTMLResponse)
 async def home(request: Request):

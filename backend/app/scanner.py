@@ -8,7 +8,16 @@ from config import configure_logging
 configure_logging()
 logger = logging.getLogger(__name__)
 
-FLAGS = ['-json', '-title', '-status-code', '-tech-detect', '-cname', '-ip', '-server', '-fr']
+FLAGS = [
+    "-json",
+    "-title",
+    "-status-code",
+    "-tech-detect",
+    "-cname",
+    "-ip",
+    "-server",
+    "-fr",
+]
 
 
 class HTTPXScanner:
@@ -38,7 +47,7 @@ class HTTPXScanner:
                 capture_output=True,
                 text=True,
                 check=True,
-                timeout=30
+                timeout=30,
             )
             logger.info(f"HTTPX scan completed for {domain}")
         except subprocess.TimeoutExpired as te:
@@ -51,8 +60,12 @@ class HTTPXScanner:
         output = process.stdout
         logger.debug(f"HTTPX scan output: {output}, type: {type(output)}")
         if not output:
-            logger.error(f"No output returned for domain {domain}. Domain might not be found.")
-            return {"error": f"No output returned for domain {domain}. Domain might not be found."}
+            logger.error(
+                f"No output returned for domain {domain}. Domain might not be found."
+            )
+            return {
+                "error": f"No output returned for domain {domain}. Domain might not be found."
+            }
 
         try:
             parsed_data = json.loads(output)

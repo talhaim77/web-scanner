@@ -6,10 +6,12 @@ from typing import Dict, Any
 configure_logging()
 logger = logging.getLogger(__name__)
 
+
 class ResultBuilder:
     """
     Builder to construct ScanResult model.
     """
+
     def __init__(self, domain: str):
         self.result: Dict[str, Any] = {"domain": domain}
         logger.debug(f"Initialized ResultBuilder with domain: {domain}")

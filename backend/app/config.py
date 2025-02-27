@@ -3,6 +3,7 @@ import os
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 
+
 def configure_logging():
     # Use a local variable to avoid modifying the global LOG_LEVEL
     level = LOG_LEVEL
@@ -17,5 +18,5 @@ def configure_logging():
     logging.basicConfig(
         level=getattr(logging, level, logging.INFO),
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        force=True  # Overwrite previous configurations
+        force=True,  # Overwrite previous configurations
     )
