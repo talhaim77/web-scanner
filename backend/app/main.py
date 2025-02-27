@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-
+from routers.scan_router import router as scan_router
 app = FastAPI()
 
 
@@ -8,6 +8,5 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
+app.include_router(scan_router, tags=["Scan"])
+
