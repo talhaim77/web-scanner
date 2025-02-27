@@ -1,20 +1,16 @@
 import logging
-
+from config import configure_logging
 from fastapi import APIRouter, HTTPException
-
 from models import ScanResult
-
 from utils.validators import is_valid_domain
-
 from extractor import HTTPXExtractor
-
 from builder import ResultBuilder
-
 from scanner import HTTPXScanner
 
+configure_logging()
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
-logger = logging.getLogger("uvicorn")
 
 @router.get("/api/scan", response_model=ScanResult)
 async def scan_website(domain: str):
@@ -29,26 +25,21 @@ async def scan_website(domain: str):
 
     extractor = HTTPXExtractor()
     builder = ResultBuilder(domain=domain)
-    errors = []
 
     try:
-        async for raw_data in HTTPXScanner.run_scan(domain):
-            if "error" in raw_data:
-                errors.append(raw_data)
-                logger.error(f"Error scanning {domain}: {raw_data}")
-                continue
+        raw_data = await HTTPXScanner.run_scan(domain)
+        logger.info(f"Raw data...{raw_data}")
+        if "error" in raw_data:
+            logger.error(f"Error scanning {domain}: {raw_data}")
+            raise HTTPException(status_code=500, detail="error occur during scanning.")
 
-            extracted = extractor.extract(raw_data)
-            builder.add_data(extracted)
-
-        logger.info(f"Scan completed for {domain}. Errors encountered: {len(errors)}")
-
+        extracted = extractor.extract(raw_data)
+        builder.add_data(extracted)
+        logger.info(f"Scan completed for {domain}.")
+    except HTTPException as e:
+        raise e
     except Exception as e:
-        logger.exception(f"Unexpected error during scan of {domain}")
-        raise HTTPException(status_code=500, detail=f"Scanning failed: {e}")
-
-    if errors:
-        logger.warning(f"Scan for {domain} completed with {len(errors)} errors.")
-        raise HTTPException(status_code=500, detail="One or more errors occurred during scanning.")
+        logger.exception(f"Unexpected error during scan of {domain}, {e}")
+        raise HTTPException(status_code=500, detail=f"Scanning failed")
 
     return builder.build()
