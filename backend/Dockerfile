@@ -4,6 +4,8 @@ FROM python:3.9-slim
 # Set the working directory inside the container
 WORKDIR /app
 
+ENV PYTHONPATH=/app
+
 # Copy the requirements file into the container
 COPY requirements.txt .
 

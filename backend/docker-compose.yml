@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - LOG_LEVEL=INFO
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - LOG_LEVEL=DEBUG
