@@ -2,7 +2,7 @@ import logging
 from config import configure_logging
 from fastapi import APIRouter, HTTPException
 from models import ScanResult
-from utils.validators import is_valid_domain
+from utils.validators import is_valid_domain, check_domain_exists
 from extractor import HTTPXExtractor
 from builder import ResultBuilder
 from scanner import HTTPXScanner
@@ -17,7 +17,7 @@ async def scan_website(domain: str):
     """
     API endpoint to scan a website and return metadata.
     """
-    if not is_valid_domain(domain):
+    if not is_valid_domain(domain) or not check_domain_exists(domain):
         logger.warning(f"Invalid domain format received: {domain}")
         raise HTTPException(status_code=400, detail="Invalid domain format.")
 
@@ -28,10 +28,9 @@ async def scan_website(domain: str):
 
     try:
         raw_data = await HTTPXScanner.run_scan(domain)
-        logger.info(f"Raw data...{raw_data}")
         if "error" in raw_data:
             logger.error(f"Error scanning {domain}: {raw_data}")
-            raise HTTPException(status_code=500, detail="error occur during scanning.")
+            raise HTTPException(status_code=500, detail=raw_data["error"])
 
         extracted = extractor.extract(raw_data)
         builder.add_data(extracted)
