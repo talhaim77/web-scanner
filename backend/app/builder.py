@@ -1,9 +1,10 @@
 import logging
-
+from config import configure_logging
 from models import ScanResult
 from typing import Dict, Any
 
-logger = logging.getLogger("uvicorn")
+configure_logging()
+logger = logging.getLogger(__name__)
 
 class ResultBuilder:
     """
@@ -16,7 +17,7 @@ class ResultBuilder:
     def add_data(self, data: Dict[str, Any]):
         for key, value in data.items():
             if key in self.result and isinstance(self.result[key], list):
-                # aggregate scan data from multiple sources (HTTPX, Nmap ..)
+                # Aggregate scan data from multiple sources (HTTPX, Nmap, etc.)
                 self.result[key] = list(set(self.result[key] + value))
             else:
                 self.result[key] = value
