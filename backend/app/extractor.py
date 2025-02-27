@@ -33,7 +33,7 @@ class HTTPXExtractor(BaseExtractor):
             "status_code": raw_data.get("status_code", None),
             "webserver": raw_data.get("webserver", ""),
             "technologies": raw_data.get("tech", []),
-            "cnames": raw_data.get("cnames", [])
+            "cnames": raw_data.get("cname", [])
         }
         logger.info(f"Extracted Data: {extracted}")
         return extracted
