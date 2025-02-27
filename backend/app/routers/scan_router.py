@@ -34,7 +34,6 @@ async def scan_website(domain: str):
 
         extracted = extractor.extract(raw_data)
         builder.add_data(extracted)
-        logger.info(f"Scan completed for {domain}.")
     except HTTPException as e:
         raise e
     except Exception as e:

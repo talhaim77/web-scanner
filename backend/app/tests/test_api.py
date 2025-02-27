@@ -18,7 +18,7 @@ def fake_scan(monkeypatch):
 
     async def fake_run_scan(domain: str):
         """Mock response for a scan request."""
-        yield MOCK_SCAN_DATA
+        return MOCK_SCAN_DATA
 
     monkeypatch.setattr("scanner.HTTPXScanner.run_scan", fake_run_scan)
 

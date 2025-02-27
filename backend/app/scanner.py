@@ -29,13 +29,13 @@ class HTTPXScanner:
     @staticmethod
     async def run_scan(domain: str) -> Dict[str, Any]:
         """
-        Executes an HTTPX scan on the provided domain and returns the parsed JSON output.
+        Runs an HTTPX scan on the given domain and returns the parsed output.
 
-        Parameters:
+        Args:
             domain (str): The domain to scan.
 
         Returns:
-            Dict[str, Any]: The parsed JSON output from the HTTPX scan or an error dict.
+            Dict[str, Any]: The parsed JSON output from the scan, or an error dictionary if the scan fails.
         """
         cmd = ["httpx", "-u", domain] + FLAGS
         logger.info(f"Starting HTTPX scan for {domain}")
