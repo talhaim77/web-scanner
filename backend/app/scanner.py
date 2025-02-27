@@ -1,7 +1,7 @@
 import subprocess
 import json
 import shlex
-from typing import Dict, Any
+from typing import Dict, Any, AsyncGenerator
 from fastapi.concurrency import run_in_threadpool
 from app_logger import logger
 
@@ -12,7 +12,7 @@ class HTTPXScanner:
     """
 
     @staticmethod
-    async def run_scan(domain: str) -> Dict[str, Any]:
+    async def run_scan(domain: str) -> AsyncGenerator[Dict[str, Any], None]:
         """
         Runs HTTPX CLI and yields parsed JSON objects line-by-line.
         """
