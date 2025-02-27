@@ -16,7 +16,7 @@ class HTTPXScanner:
         """
         Runs HTTPX CLI and yields parsed JSON objects line-by-line.
         """
-        cmd = f"httpx -u {domain} -json -title -status-code -tech-detect -cname -ip -server"
+        cmd = f"httpx -u {domain} -json -title -status-code -tech-detect -cname -ip -server -fr"
         logger.info(f"Starting HTTPX scan for {domain}")
         logger.debug(f"Constructed command: {cmd}")
 
